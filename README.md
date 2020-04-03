@@ -1,10 +1,10 @@
-# Udacity ToDos Serverless project
+#  ToDos Serverless project: Udacity 
 
-## Project Components
+## Technologies Used 
 - Restful API (Lambda Functions, API Gateway and DynamoDb)
 - Client (React)
 
-## How to run the application
+## How to get the Application up and Running?!
 ### Backend
 To deploy an application run the following commands:
 
@@ -23,7 +23,7 @@ npm run start
 ## Deplyment details
 API Endpoint
 ```
-https://e2mg7iqieb.execute-api.us-east-1.amazonaws.com/dev/todos
+https://xvauh3s6zd.execute-api.us-east-1.amazonaws.com/dev
 ```
 Postman Collection
 ```
