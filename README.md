@@ -25,7 +25,4 @@ API Endpoint
 ```
 https://xvauh3s6zd.execute-api.us-east-1.amazonaws.com/dev
 ```
-Postman Collection
-```
-Udacity C4 Project.postman_collection.json
-```
+
