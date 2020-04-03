@@ -85,6 +85,11 @@ functions:
           path: todos
           authorizer: Auth
           cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
   DeleteTodo:
     handler: src/lambda/http/deleteTodo.handler
     events:
@@ -93,6 +98,12 @@ functions:
           path: todos/{todoId}
           authorizer: Auth
           cors: true
+      iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DeleteItem
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
+   
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
     events:
@@ -101,6 +112,12 @@ functions:
           path: todos
           authorizer: Auth
           cors: true
+           iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
+   
           reqValidatorName: RequestBodyValidator
           documentation:
             summary: create new ToDo 
@@ -117,6 +134,12 @@ functions:
           path: todos/{todoId}
           authorizer: Auth
           cors: true
+           iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:UpdateItem
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
+   
           reqValidatorName: RequestBodyValidator
           documentation:
             summary: update a ToDo 
@@ -131,6 +154,16 @@ functions:
           path: todos/{todoId}/attachment
           authorizer: Auth
           cors: true
+          iamRoleStatements:
+        - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:GetObject
+      Resource: arn:aws:s3:::${self:provider.environment.IMAGES_BUCKET}/*
+   
+
+
+
 
 resources:
   Resources:
@@ -152,6 +185,7 @@ resources:
         ResponseType: DEFAULT_4XX
         RestApiId:
           Ref: 'ApiGatewayRestApi'
+
     TodoDynamoDbTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -161,13 +195,17 @@ resources:
           - AttributeName: userId
             AttributeType: S
         KeySchema:
-          - AttributeName: todoId
+          - AttributeName: userId
             KeyType: HASH
+          - AttributeName: todoId
+            KeyType: RANGE
         GlobalSecondaryIndexes:
           - IndexName: ${self:provider.environment.USER_ID_INDEX}
             KeySchema:
             - AttributeName: userId
               KeyType: HASH
+             - AttributeName: todoId
+            KeyType: RANGE
             Projection:
               ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
