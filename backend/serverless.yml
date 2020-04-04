@@ -94,18 +94,18 @@ functions:
           path: todos
           authorizer: Auth
           cors: true
-    iamRoleStatements:
-      - Effect: Allow
-      Action:
-        - dynamodb:PutItem
-      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
-   
           reqValidatorName: RequestBodyValidator
           documentation:
             summary: create new ToDo 
             description: create new ToDo
             requestModels:
               'application/json': CreateTodo
+    iamRoleStatements:
+      - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
+   
           
 
   UpdateTodo:
