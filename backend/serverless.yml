@@ -52,6 +52,13 @@ provider:
     lambda: true
     apiGateway: true
 
+  iamRoleStatements:
+    - Effect: "Allow"
+    Action: 
+      - "xray:PutTraceSegments"
+      - "xray:PutTelemetryRecords"
+    Resource:
+      - "*"
   
 
 
