@@ -15,7 +15,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     const authHeader = event.headers['Authorization']
     const userId = getUserId(authHeader)
  
-    const item = await todosAccess.getTodoById(todoId)
+    const item = await todosAccess.getItemById(todoId)
     if(item.Count == 0){
         logger.error(`user ${userId} requesting put url for non exists todo with id ${todoId}`)
         return apiResponseHelper.generateErrorResponse(400,'TODO not exists')

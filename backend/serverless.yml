@@ -1,5 +1,5 @@
 service:
-  name: todos
+  name: items
 # app and org for use with dashboard.serverless.com
 #app: your-app-name
 #org: your-org-name
@@ -26,13 +26,13 @@ custom:
     api:
       info:
         version: v1.0.0
-        title: ToDos API
-        description: serverless api for ToDo application
+        title: Items API
+        description: serverless api for Inventory application
     models:
-      - name: CreateTodo
+      - name: CreateItem
         contentType: application/json
         schema: ${file(validators/create-todo-request.json)}
-      - name: UpdateTodo
+      - name: UpdateItem
         contentType: application/json
         schema: ${file(validators/update-todo-request.json)}
         
@@ -45,8 +45,8 @@ provider:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
-    TODO_TABLE: Todos-${self:provider.stage}
-    IMAGES_BUCKET: udacity-todos-finalproject-${self:provider.stage}
+    ITEMS_TABLE: Items-${self:provider.stage}
+    IMAGES_BUCKET: udacity-items-finalproject-${self:provider.stage}
     USER_ID_INDEX: userId
   tracing:
     lambda: true
@@ -60,7 +60,7 @@ provider:
         - dynamodb:DeleteItem
         - dynamodb:UpdateItem
         - dynamodb:Query
-      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ITEMS_TABLE}
     - Effect: Allow
       Action:
         - s3:PutObject
@@ -69,36 +69,36 @@ provider:
     - Effect: Allow
       Action:
         - dynamodb:Query
-      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
+      Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ITEMS_TABLE}/index/${self:provider.environment.USER_ID_INDEX}
     - Effect: "Allow"
-    Action: 
-      - "xray:PutTraceSegments"
-      - "xray:PutTelemetryRecords"
-    Resource:
-      - "*"
+      Action: 
+        - "xray:PutTraceSegments"
+        - "xray:PutTelemetryRecords"
+      Resource:
+        - "*"
 
   
 functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
-  GetTodos:
-    handler: src/lambda/http/getTodos.handler
+  GetItems:
+    handler: src/lambda/http/getItems.handler
     events:
       - http:
           method: get
           path: todos
           authorizer: Auth
           cors: true
-  DeleteTodo:
-    handler: src/lambda/http/deleteTodo.handler
+  DeleteItem:
+    handler: src/lambda/http/deleteItem.handler
     events:
       - http:
           method: delete
           path: todos/{todoId}
           authorizer: Auth
           cors: true
-  CreateTodo:
-    handler: src/lambda/http/createTodo.handler
+  CreateItem:
+    handler: src/lambda/http/createItem.handler
     events:
       - http:
           method: post
@@ -110,11 +110,11 @@ functions:
             summary: create new ToDo 
             description: create new ToDo
             requestModels:
-              'application/json': CreateTodo
+              'application/json': CreateItem
           
 
-  UpdateTodo:
-    handler: src/lambda/http/updateTodo.handler
+  UpdateItem:
+    handler: src/lambda/http/updateItem.handler
     events:
       - http:
           method: patch
@@ -126,7 +126,7 @@ functions:
             summary: update a ToDo 
             description: update a ToDo
             requestModels:
-              'application/json': UpdateTodo
+              'application/json': UpdateItem
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
     events:
@@ -175,7 +175,7 @@ resources:
             Projection:
               ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
-        TableName: ${self:provider.environment.TODO_TABLE}
+        TableName: ${self:provider.environment.ITEMS_TABLE}
     TodoBucket:
       Type: AWS::S3::Bucket
       Properties:

@@ -10,8 +10,8 @@ import * as AWSXRay from 'aws-xray-sdk'
 export class TodosAccess{
     constructor(
         private readonly XAWS = AWSXRay.captureAWS(AWS),
-        private readonly docClient: AWS.DynamoDB.DocumentClient = new XAWS.DynamoDB.DocumentClient(),
-        private readonly todosTable = process.env.TODO_TABLE,
+        private readonly docClient: AWS.DynamoDB.DocumentClient = new AWS.DynamoDB.DocumentClient(),
+        private readonly todosTable = process.env.ITEMS_TABLE,
         private readonly userIdIndex = process.env.USER_ID_INDEX
     )
         {}
@@ -28,7 +28,7 @@ export class TodosAccess{
         return result.Items as TodoItem[]
     }
 
-    async createTodo(request: CreateTodoRequest,userId: string): Promise<TodoItem>{
+    async createItem(request: CreateTodoRequest,userId: string): Promise<TodoItem>{
         const newId = uuid()
         const item = new TodoItem()
         item.userId= userId
@@ -47,7 +47,7 @@ export class TodosAccess{
     }
 
 
-    async getTodoById(id: string): Promise<AWS.DynamoDB.QueryOutput>{
+    async getItemById(id: string): Promise<AWS.DynamoDB.QueryOutput>{
         return await this.docClient.query({
             TableName: this.todosTable,
             KeyConditionExpression: 'todoId = :todoId',
@@ -57,7 +57,7 @@ export class TodosAccess{
         }).promise()
     }
 
-    async updateTodo(updatedTodo:UpdateTodoRequest,todoId:string){
+    async updateItem(updatedTodo:UpdateTodoRequest,todoId:string){
         await this.docClient.update({
             TableName: this.todosTable,
             Key:{
@@ -75,7 +75,7 @@ export class TodosAccess{
           }).promise()
     }
 
-    async deleteTodoById(todoId: string){
+    async deleteItemById(todoId: string){
         const param = {
             TableName: this.todosTable,
             Key:{
