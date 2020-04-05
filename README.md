@@ -1,4 +1,4 @@
-#  ToDos Serverless project: Udacity 
+#  Inventory Serverless project: Udacity 
 
 ## Technologies Used 
 - Restful API (Lambda Functions, API Gateway and DynamoDb)
@@ -23,6 +23,6 @@ npm run start
 ## Deplyment details
 API Endpoint
 ```
-https://xvauh3s6zd.execute-api.us-east-1.amazonaws.com/dev
+https://33u3nc1834.execute-api.us-east-1.amazonaws.com/dev
 ```
 
