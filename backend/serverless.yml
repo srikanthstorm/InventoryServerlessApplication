@@ -31,10 +31,10 @@ custom:
     models:
       - name: CreateItem
         contentType: application/json
-        schema: ${file(validators/create-todo-request.json)}
+        schema: ${file(validators/create-Item-request.json)}
       - name: UpdateItem
         contentType: application/json
-        schema: ${file(validators/update-todo-request.json)}
+        schema: ${file(validators/update-Item-request.json)}
         
 
 
