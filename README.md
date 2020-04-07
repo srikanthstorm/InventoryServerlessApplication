@@ -1,4 +1,4 @@
-#  Inventory Serverless project: Udacity 
+#  Inventory Serverless project:  Capstone
 
 ## Technologies Used 
 - Restful API (Lambda Functions, API Gateway and DynamoDb)
